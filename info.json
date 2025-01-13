@@ -1,0 +1,10 @@
+{
+  "name": "reactive-evolution-factor",
+  "version": "@@VERSION@@",
+  "title": "Reactive Evolution Factor",
+  "author": "James Boylan",
+  "homepage": "https://github.com/Ralnoc/factorio-events-logger",
+  "factorio_version": "2.0",
+  "description": "This mod introduces a dynamic mechanic where destroying alien spawner buildings and worm turrets directly reduces the evolution factor of enemy forces. By targeting and eliminating these structures, players can slow or reverse the pollution factor progression towards more dangerous enemy forces.",
+  "dependencies": ["base >= 2.0"]
+}
