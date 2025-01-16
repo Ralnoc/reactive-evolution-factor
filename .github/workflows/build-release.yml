@@ -53,11 +53,11 @@ jobs:
         run: |
           ROOT_DIR=$(pwd)
           mkdir -p ${ROOT_DIR}/build
-          mkdir -p ${ROOT_DIR}/build/events-logger_${{ github.ref_name }}
-          cp ${ROOT_DIR}/*.lua ${ROOT_DIR}/*.json ${ROOT_DIR}/*.png changelog.txt ${ROOT_DIR}/build/events-logger_${{ github.ref_name }}/.
+          mkdir -p ${ROOT_DIR}/build/reactive-evolution-factor_${{ github.ref_name }}
+          cp ${ROOT_DIR}/*.lua ${ROOT_DIR}/*.json ${ROOT_DIR}/*.png changelog.txt ${ROOT_DIR}/build/reactive-evolution-factor_${{ github.ref_name }}/.
           cd ${ROOT_DIR}/build || exit 1
-          sed -i "s/@@VERSION@@/${{ github.ref_name }}/g" events-logger_${{ github.ref_name }}/info.json
-          zip -r ${ROOT_DIR}/build/events-logger_${{ github.ref_name }}.zip events-logger_${{ github.ref_name }}
+          sed -i "s/@@VERSION@@/${{ github.ref_name }}/g" reactive-evolution-factor_${{ github.ref_name }}/info.json
+          zip -r ${ROOT_DIR}/build/reactive-evolution-factor_${{ github.ref_name }}.zip reactive-evolution-factor_${{ github.ref_name }}
       - name: Get release
         id: get_release
         uses: bruceadams/get-release@v1.3.2
@@ -71,8 +71,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: ./build/events-logger_${{ github.ref_name }}.zip
-          asset_name: events-logger_${{ github.ref_name }}.zip
+          asset_path: ./build/reactive-evolution-factor_${{ github.ref_name }}.zip
+          asset_name: reactive-evolution-factor_${{ github.ref_name }}.zip
           asset_content_type: application/zip
 #  release:
 #    runs-on: ubuntu-latest
@@ -93,5 +93,5 @@ jobs:
 #        env:
 #          FACTORION_MOD_API_KEY: ${{ secrets.FACTORION_MOD_API_KEY }}
 #          MOD_NAME: reactive-evolution-factor
-#          RELEASE_ARTIFACT_PATH: ./build/events-logger_${{ github.ref_name }}.zip
+#          RELEASE_ARTIFACT_PATH: ./build/reactive-evolution-factor_${{ github.ref_name }}.zip
 #        run: python publish.py
