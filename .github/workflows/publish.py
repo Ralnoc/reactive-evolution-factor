@@ -3,16 +3,19 @@ import sys
 import requests
 
 MOD_PORTAL_URL = "https://mods.factorio.com"
-INIT_UPLOAD_URL = f"{MOD_PORTAL_URL}/api/v2/mods/init_publish"
+INIT_UPLOAD_URL = f"{MOD_PORTAL_URL}/api/v2/mods/releases/init_upload"
 
 apikey = os.environ["FACTORION_MOD_API_KEY"]
 modname = os.environ["MOD_NAME"]
 filepath = os.environ["RELEASE_ARTIFACT_PATH"]
 
-request_body = data = {"mod": modname}
+request_body = data={"mod":modname}
 request_headers = {"Authorization": f"Bearer {apikey}"}
 
-response = requests.post(INIT_UPLOAD_URL, data=request_body, headers=request_headers)
+response = requests.post(
+    INIT_UPLOAD_URL,
+    data=request_body,
+    headers=request_headers)
 
 if not response.ok:
     print(f"init_upload failed: {response.text}")
