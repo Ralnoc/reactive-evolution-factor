@@ -40,21 +40,19 @@ jobs:
         run: echo "RELEASE_TAGS=\"$(git --no-pager tag --sort=creatordate --merged ${{ github.ref_name }})\"" >> "$GITHUB_OUTPUT"
       - name: Generate Changelog
         run: |
-          PREV_TAG=0.0.1
-          
           for tag in ${{ steps.get_release_tags.outputs.RELEASE_TAGS }}; do
             echo "---------------------------------------------------------------------------------------------------" >> changelog.txt
             echo "Version:  $tag" > changelog.txt
             echo "$(git --no-pager log --pretty=%ad --date=format:'Date: %m. %d. %Y' -1)" >> changelog.txt
             echo "Changes:" | sed 's/^/    /' >> changelog.txt
-            git --no-pager show --pretty=format:"%B" --no-patch -1 | sed 's/^/    /' | sed '1d'  >> changelog.txt
+            git --no-pager show --pretty=format:"%B" --no-patch -1 | sed 's/^/      /' | sed '1d'  >> changelog.txt
           done
       - name: Build project
         run: |
           ROOT_DIR=$(pwd)
           mkdir -p ${ROOT_DIR}/build
           mkdir -p ${ROOT_DIR}/build/reactive-evolution-factor_${{ github.ref_name }}
-          cp ${ROOT_DIR}/*.lua ${ROOT_DIR}/*.json ${ROOT_DIR}/*.png changelog.txt ${ROOT_DIR}/build/reactive-evolution-factor_${{ github.ref_name }}/.
+          cp -r ${ROOT_DIR}/*.lua ${ROOT_DIR}/*.json ${ROOT_DIR}/*.png changelog.txt ${ROOT_DIR}/locale README.md  ${ROOT_DIR}/build/reactive-evolution-factor_${{ github.ref_name }}/.
           cd ${ROOT_DIR}/build || exit 1
           sed -i "s/@@VERSION@@/${{ github.ref_name }}/g" reactive-evolution-factor_${{ github.ref_name }}/info.json
           zip -r ${ROOT_DIR}/build/reactive-evolution-factor_${{ github.ref_name }}.zip reactive-evolution-factor_${{ github.ref_name }}
