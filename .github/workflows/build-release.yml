@@ -56,6 +56,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/workflows/requirements.txt
           mkdir -p ./build
+      - name: Download Artifact
+        id: download-artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: reactive-evolution-factor_${{ github.ref_name }}
+          path: ./build/
       - name: Create Release
         id: create_release
         env:
@@ -82,12 +88,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           CURR_TAG: ${{ github.ref_name }}
-      - name: Download Artifact
-        id: download-artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: reactive-evolution-factor
-          path: ./build/
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
