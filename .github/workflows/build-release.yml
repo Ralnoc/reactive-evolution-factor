@@ -102,5 +102,5 @@ jobs:
         env:
           FACTORION_MOD_API_KEY: ${{ secrets.FACTORION_MOD_API_KEY }}
           MOD_NAME: reactive-evolution-factor
-          RELEASE_ARTIFACT_PATH: ${{ steps.download-artifact.outputs.download-path }}/reactive-evolution-factor_${{ github.ref_name }}.zip
+          RELEASE_ARTIFACT_PATH: ${{ steps.download_artifact.outputs.download-path }}/reactive-evolution-factor_${{ github.ref_name }}.zip
         run: python publish.py
