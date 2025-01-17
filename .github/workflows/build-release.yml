@@ -95,7 +95,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: ${{ steps.download-artifact.outputs.download-path }}
+          asset_path: ${{ steps.download_artifact.outputs.download-path }}
           asset_name: reactive-evolution-factor_${{ github.ref_name }}
           asset_content_type: application/zip
       - name: execute publish script
