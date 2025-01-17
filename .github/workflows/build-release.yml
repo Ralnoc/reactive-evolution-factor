@@ -15,17 +15,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Get Release Tags
-        id: get_release_tags
-        run: echo "RELEASE_TAGS='$(echo $(git --no-pager tag --sort=creatordate --merged main))'" >> "$GITHUB_OUTPUT"
       - name: Generate Changelog
         run: |
-          for tag in ${{ steps.get_release_tags.outputs.RELEASE_TAGS }}; do
+          if [ -f changelog.txt ]; then
+            rm changelog.txt
+          fi
+          
+          for tag in $(git --no-pager tag --sort=-creatordate --merged main); do
             echo "---------------------------------------------------------------------------------------------------" >> changelog.txt
-            echo "Version: $tag" > changelog.txt
-            echo "$(git --no-pager log --pretty=%ad --date=format:'Date: %m. %d. %Y' -1)" >> changelog.txt
-            echo "Changes:" | sed 's/^/    /' >> changelog.txt
-            git --no-pager show --pretty=format:"%B" --no-patch -1 | sed 's/^/      /' | sed '1d'  >> changelog.txt
+            echo "Version: $tag" >> changelog.txt
+            echo "$(git --no-pager log --pretty=%ad --date=format:'Date: %m. %d. %Y' -1 $tag)" >> changelog.txt
+            echo "Changes:" | sed 's/^/  /' >> changelog.txt
+            git --no-pager show --pretty=format:"%B" --no-patch -1 $tag | sed 's/^* /    - /' | sed '1d'  >> changelog.txt
           done
       - name: Build project
         run: |
