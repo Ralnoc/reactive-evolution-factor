@@ -22,7 +22,7 @@ jobs:
             rm changelog.txt
           fi
           
-          for tag in $(git --no-pager tag --sort=-creatordate --merged main); do
+          git --no-pager tag --sort=-creatordate --merged main | while read -r tag ; do
             echo "---------------------------------------------------------------------------------------------------" >> changelog.txt
             echo "Version: $tag" >> changelog.txt
             echo "$(git --no-pager log --pretty=%ad --date=format:'Date: %m. %d. %Y' -1 $tag)" >> changelog.txt
