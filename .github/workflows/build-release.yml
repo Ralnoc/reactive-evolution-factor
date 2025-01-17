@@ -57,11 +57,11 @@ jobs:
           pip install -r .github/workflows/requirements.txt
           mkdir -p ./build
       - name: Download Artifact
-        id: download-artifact
+        id: download_artifact
         uses: actions/download-artifact@v4
         with:
           name: reactive-evolution-factor_${{ github.ref_name }}
-          path: ./build/
+          path: ./build/reactive-evolution-factor_${{ github.ref_name }}.zip
       - name: Create Release
         id: create_release
         env:
@@ -96,11 +96,11 @@ jobs:
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
           asset_path: ${{ steps.download-artifact.outputs.download-path }}
-          asset_name: reactive-evolution-factor_${{ github.ref_name }}.zip
+          asset_name: reactive-evolution-factor_${{ github.ref_name }}
           asset_content_type: application/zip
       - name: execute publish script
         env:
           FACTORION_MOD_API_KEY: ${{ secrets.FACTORION_MOD_API_KEY }}
           MOD_NAME: reactive-evolution-factor
-          RELEASE_ARTIFACT_PATH: ${{ steps.download-artifact.outputs.download-path }}/reactive-evolution-factor_${{ github.ref_name }}.zip
+          RELEASE_ARTIFACT_PATH: ${{ steps.download-artifact.outputs.download-path }}
         run: python publish.py
