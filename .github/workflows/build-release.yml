@@ -61,7 +61,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: reactive-evolution-factor_${{ github.ref_name }}
-          path: ./build/reactive-evolution-factor_${{ github.ref_name }}.zip
+          path: ./build
       - name: Create Release
         id: create_release
         env:
@@ -95,7 +95,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: ${{ steps.download_artifact.outputs.download-path }}
+          asset_path: ${{ steps.download_artifact.outputs.download-path }}/reactive-evolution-factor_${{ github.ref_name }}.zip
           asset_name: reactive-evolution-factor_${{ github.ref_name }}
           asset_content_type: application/zip
       - name: execute publish script
