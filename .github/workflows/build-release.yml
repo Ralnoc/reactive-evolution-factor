@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Generate Changelog
         run: |
+          #!/usr/bin/env bash
           if [ -f changelog.txt ]; then
             rm changelog.txt
           fi
