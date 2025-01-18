@@ -62,6 +62,24 @@ These values can be extended by other mods using the provided API.
 - Upon destroying enemy turrets or spawners, the evolution factor will automatically decrease based on the configured reduction values.
 - Monitor evolution factor value changes using the debug messages if enabled.
 
+## Logged Events
+
+Leveraging the [Events Logger](https://mods.factorio.com/mod/events-logger) mod, Reactive Evolution Factor logs the following event to the `game-events.json` file:
+```json
+{
+  "surface": "The name of the current surface.",
+  "dead_entity_name": "The name of the entity that was destroyed.",
+  "current_evolution": "The current evolution factor before the reduction.",
+  "altered_evolution": "The evolution factor after the reduction.",
+  "standard_reduction": "The standard reduction factor value.",
+  "reduction_factor": "The calculated reduction factor for the destroyed entity.",
+  "destruction_factor": "The evolution factor contributed by killing spawners on the current surface.",
+  "pollution_factor": "The evolution factor contributed by pollution on the current surface.",
+  "time_factor": "The evolution factor contributed by time on the current surface.",
+  "final_evolution_factor": "The final evolution factor after all calculations."
+}
+```
+
 ### For Mod Developers
 
 By default, any `turret` or `unit-spawner` entities that Reactive Evolution Factor is unaware of will receive the default reduction vaulue of `0.002`. 

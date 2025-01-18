@@ -29,12 +29,29 @@ remote.add_interface("reactive-evolution-factor", {
     end
 })
 
+function send_std_log(event_name, event_details)
+    remote.call("events-logger", "send_std_log", {
+        ["event"] = event_name,
+        ["tick"] = game.tick,
+        ["message"] = event_details
+    })
+end
+
+function send_event(event_name, event_details)
+    remote.call("events-logger", "send_event", {
+        ["event"] = event_name,
+        ["tick"] = game.tick,
+        ["data"] = event_details
+    })
+end
+
 function print(msg)
     game.players[1].print(msg)
 end
 
 script.on_configuration_changed(function()
     if not storage.evolution_reduction_factors then
+        send_event("REDUCTION_FACTOR_RELOAD", {["message"] = "Evolution Reduction Factors table was not found. Reloading table."})
         storage.evolution_reduction_factors = _reduction_factors
     end
 end)
@@ -101,6 +118,28 @@ script.on_event(defines.events.on_entity_died, function(event)
                 game.forces.enemy.set_evolution_factor_by_pollution(game.forces.enemy.get_evolution_factor_by_pollution(current_surface) + (settings.global["reactive-evolution-factor-evolution-increment-factor"].value * reduction_value), current_surface)
                 game.forces.enemy.set_evolution_factor_by_time(game.forces.enemy.get_evolution_factor_by_time(current_surface) + ((settings.global["reactive-evolution-factor-evolution-increment-factor"].value * reduction_value) / 10), current_surface)
             end
+
+            send_event("EVOLUTION_REDUCTION", {
+                ["surface"] = current_surface.name,
+                ["dead_entity_name"] = dead_entity_name,
+                ["current_evolution"] = string.format("%.15f", current_evolution),
+                ["altered_evolution"] = string.format("%.15f", altered_evolution),
+                ["standard_reduction"] = string.format("%.15f", settings.global["reactive-evolution-factor-standard-reduction-factor"].value),
+                ["reduction_factor"] = string.format("%.15f", reduction_value),
+                ["destruction_factor"] = string.format("%.15f", game.forces.enemy.get_evolution_factor_by_killing_spawners(current_surface)),
+                ["pollution_factor"] = string.format("%.15f", game.forces.enemy.get_evolution_factor_by_pollution(current_surface)),
+                ["time_factor"] = string.format("%.15f", game.forces.enemy.get_evolution_factor_by_time(current_surface)),
+                ["final_evolution_factor"] = string.format("%.15f", game.forces.enemy.get_evolution_factor(current_surface))
+            })
+            send_std_log(
+                    "EVOLUTION_REDUCTION",
+                    "Surface: " .. current_surface.name ..
+                            " - Entity Destroyed: " .. dead_entity_name ..
+                            " - Current Evolution: " .. string.format("%.15f", current_evolution) ..
+                            " - Altered Evolution: " .. string.format("%.15f", altered_evolution) ..
+                            " - Reduction = " .. string.format("%.15f", reduction_value) ..
+                            " - Evolution = " .. string.format("%.15f", game.forces.enemy.get_evolution_factor(current_surface))
+            )
 
             if enable_debug then
                 print("\nEvolution Factors (" .. current_surface.name .. ")" ..

@@ -17,6 +17,9 @@ LIGHTGRAY='\033[0;37m'
 WHITE='\033[1;37m'
 NC='\033[0m'
 
+MOD_NAME="reactive-evolution-factor"
+ADDITIONAL_FILES="locale images/*.png LICENSE.md"
+
 rm -rf ./build/files
 mkdir -p ./build/files
 TEST_VERSION_PREFIX="999.0."
@@ -38,11 +41,11 @@ else
   echo $TESTING_VERSION > ./build/testing_version.txt
 fi
 
-mkdir -p ./build/files/reactive-evolution-factor_${TESTING_VERSION}
+mkdir -p ./build/files/${MOD_NAME}_${TESTING_VERSION}
 
 printf "${LIGHTBLUE}Copying Factorio Reactive Evolution Factor build files to build directory${NC}\n"
-for filename in control.lua settings.lua evolution_factors.lua locale info.json LICENSE README.md thumbnail.png image/reactive-evolution-factor.png image/reactive-evolution-factor-image.png; do
-  cp -r ./${filename} ./build/files/reactive-evolution-factor_${TESTING_VERSION}/.
+for filename in *.lua info.json *.png README.md ${ADDITIONAL_FILES} ; do
+  cp -r ./${filename} ./build/files/${MOD_NAME}_${TESTING_VERSION}/.
 done
 printf "${LIGHTBLUE}Updating Version to Test Version${NC}\n"
-sed -i "s/@@VERSION@@/${TESTING_VERSION}/g" ./build/files/reactive-evolution-factor_${TESTING_VERSION}/info.json
+sed -i "s/@@VERSION@@/${TESTING_VERSION}/g" ./build/files/${MOD_NAME}_${TESTING_VERSION}/info.json
